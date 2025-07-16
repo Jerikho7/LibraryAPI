@@ -15,7 +15,10 @@ dependencies = [
     "ipython (>=9.4.0,<10.0.0)",
     "redis (>=6.2.0,<7.0.0)",
     "requests (>=2.32.4,<3.0.0)",
-    "djangorestframework (>=3.16.0,<4.0.0)"
+    "djangorestframework (>=3.16.0,<4.0.0)",
+    "drf-spectacular (>=0.28.0,<0.29.0)",
+    "coverage (>=7.9.2,<8.0.0)",
+    "django-filter (>=25.1,<26.0)"
 ]
 
 
