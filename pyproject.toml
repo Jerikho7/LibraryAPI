@@ -1,0 +1,57 @@
+[project]
+name = "libraryapi"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Evgeniya",email = "osipova.dr17@yandex.ru"}
+]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "django (>=5.2.4,<6.0.0)",
+    "pillow (>=11.3.0,<12.0.0)",
+    "dotenv (>=0.9.9,<0.10.0)",
+    "psycopg2-binary (>=2.9.10,<3.0.0)",
+    "ipython (>=9.4.0,<10.0.0)",
+    "redis (>=6.2.0,<7.0.0)",
+    "requests (>=2.32.4,<3.0.0)",
+    "djangorestframework (>=3.16.0,<4.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.lint.dependencies]
+flake8 = "^7.3.0"
+mypy = "^1.17.0"
+black = "^25.1.0"
+isort = "^6.0.1"
+
+[tool.mypy]
+disallow_untyped_defs = true
+no_implicit_optional = true
+warn_return_any = true
+exclude = 'venv'
+
+[tool.black]
+line-length = 119
+exclude = '''
+(
+  /(
+      \.eggs         # Исключить несколько общих каталогов
+    | \.git          # в корне проекта
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | dist
+  )/
+  | foo.py           # Также отдельно исключить файл с именем foo.py
+                     # в корне проекта
+)
+'''
+
+[tool.isort]
+line_length = 119
