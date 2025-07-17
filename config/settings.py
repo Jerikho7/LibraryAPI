@@ -68,6 +68,9 @@ DATABASES = {
 
 REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
 }
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -92,6 +95,8 @@ TIME_ZONE = "Asia/Sakhalin"
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
+
+AUTH_USER_MODEL = 'users.User'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
