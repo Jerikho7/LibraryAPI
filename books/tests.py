@@ -7,10 +7,7 @@ from books.serializers import AuthorSerializer, BookSerializer
 class AuthorModelTestCase(unittest.TestCase):
     def setUp(self):
         self.author = Author.objects.create(
-            first_name="John",
-            last_name="Doe",
-            birthday=date(1980, 1, 1),
-            country="USA"
+            first_name="John", last_name="Doe", birthday=date(1980, 1, 1), country="USA"
         )
 
     def test_author_str(self):
@@ -20,10 +17,7 @@ class AuthorModelTestCase(unittest.TestCase):
 class BookModelTestCase(unittest.TestCase):
     def setUp(self):
         self.author = Author.objects.create(
-            first_name="Jane",
-            last_name="Austen",
-            birthday=date(1775, 12, 16),
-            country="UK"
+            first_name="Jane", last_name="Austen", birthday=date(1775, 12, 16), country="UK"
         )
         self.book = Book.objects.create(
             title="Pride and Prejudice",
@@ -32,7 +26,7 @@ class BookModelTestCase(unittest.TestCase):
             isbn="9781234567890",
             total_copies=5,
             available_copies=5,
-            description="A classic novel"
+            description="A classic novel",
         )
 
     def test_book_str(self):
@@ -54,10 +48,7 @@ class BookModelTestCase(unittest.TestCase):
 class AuthorSerializerTestCase(unittest.TestCase):
     def setUp(self):
         self.author = Author.objects.create(
-            first_name="Mary",
-            last_name="Shelley",
-            birthday=date(1797, 8, 30),
-            country="UK"
+            first_name="Mary", last_name="Shelley", birthday=date(1797, 8, 30), country="UK"
         )
 
     def test_author_serialization(self):
@@ -68,12 +59,7 @@ class AuthorSerializerTestCase(unittest.TestCase):
         self.assertEqual(data["country"], "UK")
 
     def test_author_deserialization_valid(self):
-        data = {
-            "first_name": "Leo",
-            "last_name": "Tolstoy",
-            "birthday": "1828-09-09",
-            "country": "Russia"
-        }
+        data = {"first_name": "Leo", "last_name": "Tolstoy", "birthday": "1828-09-09", "country": "Russia"}
         serializer = AuthorSerializer(data=data)
         self.assertTrue(serializer.is_valid())
 
@@ -81,10 +67,7 @@ class AuthorSerializerTestCase(unittest.TestCase):
 class BookSerializerTestCase(unittest.TestCase):
     def setUp(self):
         self.author = Author.objects.create(
-            first_name="Fyodor",
-            last_name="Dostoevsky",
-            birthday=date(1821, 11, 11),
-            country="Russia"
+            first_name="Fyodor", last_name="Dostoevsky", birthday=date(1821, 11, 11), country="Russia"
         )
         self.book = Book.objects.create(
             title="The Idiot",
@@ -92,7 +75,7 @@ class BookSerializerTestCase(unittest.TestCase):
             published_year=1869,
             isbn="9781234567897",
             total_copies=4,
-            available_copies=4
+            available_copies=4,
         )
 
     def test_book_serialization(self):
@@ -109,7 +92,7 @@ class BookSerializerTestCase(unittest.TestCase):
             "published_year": 1866,
             "isbn": "9781234567891",
             "total_copies": 3,
-            "available_copies": 2
+            "available_copies": 2,
         }
         serializer = BookSerializer(data=data)
         self.assertTrue(serializer.is_valid())
@@ -121,7 +104,7 @@ class BookSerializerTestCase(unittest.TestCase):
             "published_year": 1900,
             "isbn": "123",
             "total_copies": 1,
-            "available_copies": 1
+            "available_copies": 1,
         }
         serializer = BookSerializer(data=data)
         self.assertFalse(serializer.is_valid())

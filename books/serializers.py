@@ -23,18 +23,21 @@ class AuthorSerializer(serializers.ModelSerializer):
 
 class BookSerializer(serializers.ModelSerializer):
     author = AuthorSerializer(read_only=True)
-    author_id = serializers.PrimaryKeyRelatedField(
-        queryset=Author.objects.all(),
-        source="author",
-        write_only=True
-    )
+    author_id = serializers.PrimaryKeyRelatedField(queryset=Author.objects.all(), source="author", write_only=True)
     isbn = serializers.CharField(validators=[validate_isbn])
 
     class Meta:
         model = Book
         fields = [
-            "id", "title", "author", "author_id", "published_year", "isbn",
-            "total_copies", "available_copies", "description"
+            "id",
+            "title",
+            "author",
+            "author_id",
+            "published_year",
+            "isbn",
+            "total_copies",
+            "available_copies",
+            "description",
         ]
 
     def validate(self, attrs):

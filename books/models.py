@@ -2,28 +2,13 @@ from django.db import models
 
 
 class Author(models.Model):
-    first_name = models.CharField(
-        max_length=30,
-        help_text="Укажите имя автора",
-        verbose_name="Имя"
-    )
-    last_name = models.CharField(
-        max_length=30,
-        help_text="Укажите фамилию автора",
-        verbose_name="Фамилия"
-    )
+    first_name = models.CharField(max_length=30, help_text="Укажите имя автора", verbose_name="Имя")
+    last_name = models.CharField(max_length=30, help_text="Укажите фамилию автора", verbose_name="Фамилия")
     birthday = models.DateField(
-        blank=True,
-        null=True,
-        verbose_name="Дата рождения",
-        help_text="Укажите дату рождения (гггг-мм-дд)"
+        blank=True, null=True, verbose_name="Дата рождения", help_text="Укажите дату рождения (гггг-мм-дд)"
     )
     country = models.CharField(
-        max_length=50,
-        blank=True,
-        null=True,
-        verbose_name="Страна",
-        help_text="Введите страну автора"
+        max_length=50, blank=True, null=True, verbose_name="Страна", help_text="Введите страну автора"
     )
 
     class Meta:
@@ -36,43 +21,24 @@ class Author(models.Model):
 
 
 class Book(models.Model):
-    title = models.CharField(
-        max_length=255,
-        verbose_name="Название книги",
-        help_text="Введите название книги"
-    )
+    title = models.CharField(max_length=255, verbose_name="Название книги", help_text="Введите название книги")
     author = models.ForeignKey(
         "Author",
         on_delete=models.CASCADE,
         related_name="books",
         verbose_name="Автор",
-        help_text="Выберите автора книги"
+        help_text="Выберите автора книги",
     )
-    published_year = models.PositiveIntegerField(
-        verbose_name="Год издания",
-        help_text="Укажите год издания"
-    )
-    isbn = models.CharField(
-        max_length=13,
-        unique=True,
-        verbose_name="ISBN",
-        help_text="Введите ISBN книги (13 цифр)"
-    )
+    published_year = models.PositiveIntegerField(verbose_name="Год издания", help_text="Укажите год издания")
+    isbn = models.CharField(max_length=13, unique=True, verbose_name="ISBN", help_text="Введите ISBN книги (13 цифр)")
     total_copies = models.PositiveIntegerField(
-        default=1,
-        verbose_name="Количество экземпляров",
-        help_text="Общее количество экземпляров книги"
+        default=1, verbose_name="Количество экземпляров", help_text="Общее количество экземпляров книги"
     )
     available_copies = models.PositiveIntegerField(
-        default=1,
-        verbose_name="Доступно для выдачи",
-        help_text="Число доступных экземпляров"
+        default=1, verbose_name="Доступно для выдачи", help_text="Число доступных экземпляров"
     )
     description = models.TextField(
-        blank=True,
-        null=True,
-        verbose_name="Описание",
-        help_text="Опционально: краткое описание книги"
+        blank=True, null=True, verbose_name="Описание", help_text="Опционально: краткое описание книги"
     )
 
     class Meta:

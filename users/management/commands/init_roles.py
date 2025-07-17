@@ -4,6 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 
 from books.models import Book, Author
 
+
 class Command(BaseCommand):
     help = "Создает базовые роли: readers, librarians, moderators"
 
@@ -19,8 +20,14 @@ class Command(BaseCommand):
         librarian_perms = Permission.objects.filter(
             content_type__in=[book_ct, author_ct],
             codename__in=[
-                "view_book", "add_book", "change_book", "delete_book",
-                "view_author", "add_author", "change_author", "delete_author",
+                "view_book",
+                "add_book",
+                "change_book",
+                "delete_book",
+                "view_author",
+                "add_author",
+                "change_author",
+                "delete_author",
             ],
         )
         librarians_group.permissions.set(librarian_perms)
