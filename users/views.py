@@ -1,10 +1,12 @@
+from django.core.mail import send_mail
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.generics import CreateAPIView, UpdateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
+from config import settings
 from users.models import User
 from users.permissions import IsModerator
 
@@ -20,6 +22,13 @@ class RegisterView(CreateAPIView):
 
     serializer_class = RegisterSerializer
     permission_classes = [AllowAny]
+
+    def send_welcome_email(self, user_email):
+        subject = 'Добро пожаловать в наш сервис'
+        message = 'Спасибо, что зарегистрировались в нашем сервисе!'
+        from_email = settings.DEFAULT_FROM_EMAIL,
+        recipient_list = [user_email]
+        send_mail(subject, message, from_email, recipient_list)
 
 
 class ChangePasswordView(UpdateAPIView):
@@ -88,7 +97,7 @@ class UserViewSet(ModelViewSet):
         user = request.user
         user.is_active = False
         user.save()
-        return Response({"detail": "Профиль деактивирован."}, status=status.HTTP_204_NO_CONTENT)
+        return Response({"detail": "Профиль удален."}, status=status.HTTP_204_NO_CONTENT)
 
 
 class ModeratorUserViewSet(ModelViewSet):
@@ -108,3 +117,17 @@ class ModeratorUserViewSet(ModelViewSet):
             return Response({"detail": "Нельзя удалить активного пользователя."}, status=status.HTTP_403_FORBIDDEN)
         instance.delete()
         return Response({"detail": "Пользователь удален."}, status=status.HTTP_204_NO_CONTENT)
+
+class ReadOnlyUserViewSet(ReadOnlyModelViewSet):
+    """
+    Библиотекари и модераторы могут просматривать всех пользователей.
+    """
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_permissions(self):
+        user = self.request.user
+        if user.groups.filter(name__in=["librarians", "moderators"]).exists():
+            return [IsAuthenticated()]
+        return []

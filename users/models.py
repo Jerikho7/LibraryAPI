@@ -27,14 +27,13 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractUser):
-    """Кастомная модель пользователя с расширенными полями и связью с Telegram.
+    """Кастомная модель пользователя с расширенными полями.
 
     Атрибуты:
         email (EmailField): Уникальный email, используемый в качестве логина.
         first_name (CharField): Имя пользователя.
         last_name (CharField): Фамилия пользователя.
         avatar (ImageField): Аватар пользователя. Загружается в 'users/avatars/'.
-        tg_chat_id (CharField): Идентификатор чата Telegram.
         is_active (BooleanField): Активность пользователя (вместо удаления).
     """
 

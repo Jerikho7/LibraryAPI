@@ -1,7 +1,7 @@
 from datetime import date
 
 from rest_framework import serializers
-from .models import Author, Book
+from .models import Author, Book, Genre
 from .validators import validate_isbn, validate_not_future_date
 
 
@@ -20,10 +20,19 @@ class AuthorSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError("Автор должен быть старше 10 лет.")
         return attrs
 
+class GenreSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Genre
+        fields = ["id", "name", "description"]
+
 
 class BookSerializer(serializers.ModelSerializer):
     author = AuthorSerializer(read_only=True)
     author_id = serializers.PrimaryKeyRelatedField(queryset=Author.objects.all(), source="author", write_only=True)
+    genres = GenreSerializer(many=True, read_only=True)
+    genre_ids = serializers.PrimaryKeyRelatedField(
+        queryset=Genre.objects.all(), many=True, write_only=True, source="genres"
+    )
     isbn = serializers.CharField(validators=[validate_isbn])
 
     class Meta:
@@ -38,6 +47,8 @@ class BookSerializer(serializers.ModelSerializer):
             "total_copies",
             "available_copies",
             "description",
+            "genres",
+            "genre_ids"
         ]
 
     def validate(self, attrs):

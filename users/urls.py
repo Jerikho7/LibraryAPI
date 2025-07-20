@@ -8,6 +8,7 @@ from users.views import (
     ChangePasswordView,
     UserViewSet,
     ModeratorUserViewSet,
+    ReadOnlyUserViewSet,
 )
 
 from rest_framework.permissions import AllowAny
@@ -17,6 +18,7 @@ app_name = UsersConfig.name
 router = DefaultRouter()
 router.register(r"profile", UserViewSet, basename="user-profile")
 router.register(r"moderator/users", ModeratorUserViewSet, basename="moderator-users")
+router.register(r"users-readonly", ReadOnlyUserViewSet, basename="users-readonly")
 
 urlpatterns = [
     path("register/", RegisterView.as_view(), name="register"),

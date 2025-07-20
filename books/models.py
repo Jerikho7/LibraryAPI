@@ -19,6 +19,16 @@ class Author(models.Model):
     def __str__(self):
         return f"{self.last_name} {self.first_name}"
 
+class Genre(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    description = models.TextField(blank=True)
+
+    class Meta:
+        verbose_name = "Жанр"
+        verbose_name_plural = "Жанры"
+
+    def __str__(self):
+        return self.name
 
 class Book(models.Model):
     title = models.CharField(max_length=255, verbose_name="Название книги", help_text="Введите название книги")
@@ -40,6 +50,7 @@ class Book(models.Model):
     description = models.TextField(
         blank=True, null=True, verbose_name="Описание", help_text="Опционально: краткое описание книги"
     )
+    genres = models.ManyToManyField(Genre, related_name="books", blank=True)
 
     class Meta:
         verbose_name = "Книга"
