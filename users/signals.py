@@ -5,8 +5,12 @@ from django.contrib.auth.models import Group
 
 User = get_user_model()
 
+
 @receiver(post_save, sender=User)
-def add_to_readers_group(sender, instance, created, **kwargs):
+def add_user_to_readers_group(sender, instance, created, **kwargs):
+    """
+    Автоматически добавляет нового пользователя в группу readers.
+    """
     if created:
         readers_group, _ = Group.objects.get_or_create(name="readers")
         instance.groups.add(readers_group)

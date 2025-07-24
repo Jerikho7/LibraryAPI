@@ -48,7 +48,7 @@ class UserTests(APITestCase):
         self.assertTrue(self.user.check_password("NewPass123"))
 
     def test_deactivate_own_profile(self):
-        url = reverse("users:user-profile-deactivate-own-profile")
+        url = reverse("users:user-profile-me")
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.user.refresh_from_db()

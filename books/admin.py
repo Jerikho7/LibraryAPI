@@ -7,9 +7,11 @@ class AuthorAdmin(admin.ModelAdmin):
     list_display = ("last_name", "first_name", "country", "birthday")
     search_fields = ("last_name", "first_name")
 
+
 @admin.register(Genre)
 class GenreAdmin(admin.ModelAdmin):
     list_display = ("name",)
+
 
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):

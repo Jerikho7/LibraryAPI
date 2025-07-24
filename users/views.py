@@ -23,12 +23,26 @@ class RegisterView(CreateAPIView):
     serializer_class = RegisterSerializer
     permission_classes = [AllowAny]
 
+    def perform_create(self, serializer):
+        user = serializer.save()
+        self.send_welcome_email(user.email)
+
     def send_welcome_email(self, user_email):
-        subject = 'Добро пожаловать в наш сервис'
-        message = 'Спасибо, что зарегистрировались в нашем сервисе!'
-        from_email = settings.DEFAULT_FROM_EMAIL,
-        recipient_list = [user_email]
-        send_mail(subject, message, from_email, recipient_list)
+        try:
+            subject = "Добро пожаловать!"
+            message = "Спасибо за регистрацию!"
+            from_email = settings.DEFAULT_FROM_EMAIL
+            recipient_list = [user_email]
+
+            send_mail(
+                subject=subject,
+                message=message,
+                from_email=from_email,
+                recipient_list=recipient_list,
+                fail_silently=False,
+            )
+        except Exception as e:
+            print(f"Ошибка отправки: {e}")
 
 
 class ChangePasswordView(UpdateAPIView):
@@ -83,21 +97,24 @@ class UserViewSet(ModelViewSet):
             status=status.HTTP_405_METHOD_NOT_ALLOWED,
         )
 
-    @action(methods=["patch"], detail=False, url_path="me")
-    def update_own_profile(self, request):
+    @action(methods=["get", "patch", "delete"], detail=False, url_path="me")
+    def me(self, request):
         user = request.user
-        serializer = self.get_serializer(user, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
 
-    @action(methods=["delete"], detail=False, url_path="me")
-    def deactivate_own_profile(self, request):
-        """Пользователь деактивирует свой аккаунт (is_active=False)."""
-        user = request.user
-        user.is_active = False
-        user.save()
-        return Response({"detail": "Профиль удален."}, status=status.HTTP_204_NO_CONTENT)
+        if request.method == "GET":
+            serializer = self.get_serializer(user)
+            return Response(serializer.data)
+
+        elif request.method == "PATCH":
+            serializer = self.get_serializer(user, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data)
+
+        elif request.method == "DELETE":
+            user.is_active = False
+            user.save()
+            return Response({"detail": "Профиль удален."}, status=status.HTTP_204_NO_CONTENT)
 
 
 class ModeratorUserViewSet(ModelViewSet):
@@ -118,10 +135,12 @@ class ModeratorUserViewSet(ModelViewSet):
         instance.delete()
         return Response({"detail": "Пользователь удален."}, status=status.HTTP_204_NO_CONTENT)
 
+
 class ReadOnlyUserViewSet(ReadOnlyModelViewSet):
     """
     Библиотекари и модераторы могут просматривать всех пользователей.
     """
+
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
