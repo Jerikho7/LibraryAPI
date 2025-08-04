@@ -1,8 +1,5 @@
-import unittest
 from django.test import TestCase
 from books.models import Author, Book, Genre
-from django.utils import timezone
-from rest_framework.exceptions import ValidationError
 from books.serializers import AuthorSerializer, BookSerializer, GenreSerializer
 from datetime import date
 from rest_framework.test import APITestCase

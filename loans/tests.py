@@ -1,9 +1,8 @@
-import unittest
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from books.models import Book, Author, Genre
 from loans.models import Loan
-from datetime import date, timedelta
+from datetime import timedelta
 from rest_framework.test import APITestCase
 from rest_framework import status
 from django.contrib.auth.models import Group
@@ -77,6 +76,7 @@ class TestLoanModel(TestCase):
         self.book.save()
         with self.assertRaises(ValueError):
             Loan.objects.create(user=self.user, book=self.book)
+
 
 class TestLoanSerializer(TestCase):
     def setUp(self):
